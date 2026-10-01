@@ -1,1 +1,85 @@
-<!doctype html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1.0"><title>Owner Panel | Anand Adda</title><link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin><link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet"><link rel="stylesheet" href="admin.css"></head><body><main><a href="index.html">← Public website</a><section id="login"><p>ANAND ADDA · OWNER ACCESS</p><h1>Welcome back.</h1><form id="loginForm"><label>Email<input id="email" type="email" required></label><label>Password<input id="password" type="password" required></label><button>Sign in</button><b id="loginMsg"></b></form></section><section id="panel" hidden><header><div><p>STORE MANAGEMENT</p><h1>Make it yours.</h1></div><button id="signOut">Sign out</button></header><nav><button class="tab active" data-target="products">Products</button><button class="tab" data-target="details">Shop details</button><button class="tab" data-target="offers">Offers</button></nav><article id="products"><h2>Weekly products</h2><form id="productForm"><label>Product name<input name="name" required></label><label>Price ₹<input name="price" type="number"></label><label>Category<input name="category"></label><label>Sizes (S, M, L)<input name="sizes"></label><label class="wide">Description<textarea name="description"></textarea></label><label class="wide">Product photos<input id="photos" type="file" accept="image/*" multiple></label><button>Add product</button><b id="productMsg"></b></form><div id="productList"></div></article><article id="details" hidden><h2>Shop details</h2><form id="settingsForm"><label>Shop name<input name="shop_name"></label><label>Opening hours<input name="opening_hours"></label><label class="wide">Hero text<textarea name="hero_text"></textarea></label><label class="wide">About<textarea name="about_text"></textarea></label><label class="wide">Address<textarea name="address"></textarea></label><label>Phone<input name="phone"></label><label>WhatsApp number<input name="whatsapp"></label><label>Instagram<input name="instagram"></label><label>Maps link<input name="maps_url"></label><button>Save details</button><b id="settingsMsg"></b></form></article><article id="offers" hidden><h2>Offers</h2><form id="offerForm"><label class="wide">Offer title<input name="title" required></label><label class="wide">Details<textarea name="details"></textarea></label><button>Publish offer</button><b id="offerMsg"></b></form><div id="offerList"></div></article></section></main><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="admin.js"></script></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1.0">
+  <meta name="description" content="Anand Adda Owner Panel">
+  <title>Owner Panel | Anand Adda</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;600;700&family=Space+Grotesk:wght@600;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+  <main>
+    <a class="public-link" href="index.html">← Public website</a>
+
+    <section id="login" class="login-card">
+      <p class="eyebrow">ANAND ADDA · OWNER ACCESS</p>
+      <h1>Welcome back.</h1>
+      <form id="loginForm" class="login-form">
+        <label>Email<input id="email" type="email" autocomplete="email" required></label>
+        <label>Password<input id="password" type="password" autocomplete="current-password" required></label>
+        <button type="submit">Sign in</button>
+        <p class="form-message" id="loginMsg" aria-live="polite"></p>
+      </form>
+    </section>
+
+    <section id="panel" hidden>
+      <header class="panel-header"><div><p class="eyebrow">STORE MANAGEMENT</p><h1>Make it yours.</h1></div><div class="header-actions"><a class="view-live" href="index.html" target="_blank" rel="noopener">View public website ↗</a><button id="signOut" type="button" class="secondary">Sign out</button></div></header>
+
+      <nav class="tabs" aria-label="Owner Panel sections">
+        <button class="tab active" type="button" data-target="dashboard">Dashboard</button>
+        <button class="tab" type="button" data-target="products">Products</button>
+        <button class="tab" type="button" data-target="weekly">Weekly updates</button>
+        <button class="tab" type="button" data-target="offers">Offers</button>
+        <button class="tab" type="button" data-target="media">Website photos</button>
+        <button class="tab" type="button" data-target="details">Shop details</button>
+        <button class="tab" type="button" data-target="reviews">Reviews</button>
+      </nav>
+
+      <article id="dashboard" class="panel-section">
+        <p class="eyebrow">AT A GLANCE</p><h2>Your shop, up to date.</h2>
+        <div class="dashboard-grid"><div class="stat"><span id="activeProductCount">0</span><p>Active products</p></div><div class="stat"><span id="weeklyUpdateCount">0</span><p>Active weekly updates</p></div><div class="stat"><span id="pendingReviewCount">0</span><p>Reviews to review</p></div><div class="stat"><span id="currentOfferCount">0</span><p>Current offers</p></div></div>
+        <p class="help-text">Use the sections above to update the public website. Changes appear automatically after they are saved.</p>
+      </article>
+
+      <article id="products" class="panel-section" hidden>
+        <div class="section-title"><div><p class="eyebrow">CATALOGUE</p><h2 id="productFormTitle">Add a product</h2></div><button id="cancelProductEdit" type="button" class="secondary" hidden>Cancel editing</button></div>
+        <form id="productForm" class="content-form"><input type="hidden" name="id"><label>Product name<input name="name" maxlength="120" required></label><label>Price ₹<input name="price" type="number" min="0" step="0.01"></label><label>Category<input name="category" maxlength="80"></label><label>Sizes (for example: S, M, L)<input name="sizes" maxlength="240"></label><label class="wide">Description<textarea name="description" maxlength="3000"></textarea></label><label class="check-label"><input name="is_active" type="checkbox" checked> Show this product on the public website</label><label class="wide">Product photos <span class="field-help">JPG, PNG or WebP · up to 5 MB each</span><input id="productPhotos" type="file" accept="image/jpeg,image/png,image/webp" multiple></label><div class="wide image-preview-grid" id="productPhotoPreview" aria-live="polite"></div><div class="wide form-actions"><button type="submit" id="productSubmit">Add product</button><p class="form-message" id="productMsg" aria-live="polite"></p></div></form>
+        <div id="productList" class="management-list" aria-live="polite"></div>
+      </article>
+
+      <article id="weekly" class="panel-section" hidden>
+        <div class="section-title"><div><p class="eyebrow">NEWS FROM THE SHOP</p><h2 id="weeklyFormTitle">Add a weekly update</h2></div><button id="cancelWeeklyEdit" type="button" class="secondary" hidden>Cancel editing</button></div>
+        <form id="weeklyForm" class="content-form"><input type="hidden" name="id"><label>Title<input name="title" maxlength="120" required></label><label>Date and time<input name="published_at" type="datetime-local"></label><label class="wide">Short caption<input name="caption" maxlength="280"></label><label class="wide">Longer description (optional)<textarea name="description" maxlength="3000"></textarea></label><label class="check-label"><input name="is_active" type="checkbox" checked> Show this update on the public website</label><label>Update photo <span class="field-help">JPG, PNG or WebP · up to 5 MB</span><input id="weeklyPhoto" type="file" accept="image/jpeg,image/png,image/webp"></label><div class="wide image-preview-grid" id="weeklyPhotoPreview" aria-live="polite"></div><div class="wide form-actions"><button type="submit" id="weeklySubmit">Publish update</button><p class="form-message" id="weeklyMsg" aria-live="polite"></p></div></form>
+        <div id="weeklyList" class="management-list" aria-live="polite"></div>
+      </article>
+
+      <article id="offers" class="panel-section" hidden>
+        <div class="section-title"><div><p class="eyebrow">CURRENT OFFER &amp; HISTORY</p><h2 id="offerFormTitle">Publish a new offer</h2></div><button id="cancelOfferEdit" type="button" class="secondary" hidden>Cancel editing</button></div>
+        <form id="offerForm" class="content-form"><input type="hidden" name="id"><label class="wide">Offer title<input name="title" maxlength="160" required></label><label class="wide">Offer details<textarea name="details" maxlength="1500"></textarea></label><label class="check-label"><input name="is_active" type="checkbox" checked> Make this the current public offer</label><label>Offer photo <span class="field-help">One JPG, PNG or WebP · up to 5 MB</span><input id="offerPhotoInput" type="file" accept="image/jpeg,image/png,image/webp"></label><div class="wide image-preview-grid" id="offerPhotoPreview" aria-live="polite"></div><div class="wide form-actions"><button type="submit" id="offerSubmit">Publish offer</button><p class="form-message" id="offerMsg" aria-live="polite"></p></div></form>
+        <div id="offerList" class="management-list" aria-live="polite"></div>
+      </article>
+
+      <article id="media" class="panel-section" hidden>
+        <p class="eyebrow">WEBSITE PHOTOS</p><h2>Logo and shop photo</h2>
+        <form id="mediaForm" class="content-form"><section class="media-field"><div><h3>Shop logo</h3><p>Shown in the round brand area in the header and footer.</p></div><div id="currentLogoPreview" class="current-media empty-media">No logo uploaded yet.</div><label>Replace logo <span class="field-help">JPG, PNG or WebP · up to 5 MB</span><input id="logoFile" type="file" accept="image/jpeg,image/png,image/webp"></label><button id="removeLogo" type="button" class="delete secondary" hidden>Remove logo</button></section><section class="media-field"><div><h3>Main shop photo</h3><p>Shown in the existing Shop Details photo area.</p></div><div id="currentShopPhotoPreview" class="current-media empty-media">No shop photo uploaded yet.</div><label>Replace shop photo <span class="field-help">JPG, PNG or WebP · up to 5 MB</span><input id="shopPhotoFile" type="file" accept="image/jpeg,image/png,image/webp"></label><button id="removeShopPhoto" type="button" class="delete secondary" hidden>Remove shop photo</button></section><div class="wide form-actions"><button type="submit">Save website photos</button><p class="form-message" id="mediaMsg" aria-live="polite"></p></div></form>
+      </article>
+
+      <article id="details" class="panel-section" hidden>
+        <p class="eyebrow">SHOP INFORMATION</p><h2>Keep the essentials current.</h2>
+        <form id="settingsForm" class="content-form"><label>Shop name<input name="shop_name" maxlength="120"></label><label>Opening hours<input name="opening_hours" maxlength="120"></label><label class="wide">Hero text<textarea name="hero_text" maxlength="500"></textarea></label><label class="wide">About the shop<textarea name="about_text" maxlength="2000"></textarea></label><label class="wide">Address<textarea name="address" maxlength="1000"></textarea></label><label>Phone<input name="phone" type="tel" maxlength="40"></label><label>WhatsApp number<input name="whatsapp" type="tel" maxlength="40" placeholder="91... without +"></label><label>Instagram handle<input name="instagram" maxlength="120" placeholder="@anandadda"></label><label>Google Maps link<input name="maps_url" type="url" maxlength="1000" placeholder="https://maps.google.com/..."></label><div class="wide form-actions"><button type="submit">Save shop details</button><p class="form-message" id="settingsMsg" aria-live="polite"></p></div></form>
+      </article>
+
+      <article id="reviews" class="panel-section" hidden>
+        <p class="eyebrow">CUSTOMER FEEDBACK</p><h2>Review submissions</h2><p class="help-text">Only approved reviews are shown on the public website.</p>
+        <div id="reviewAdminList" class="management-list" aria-live="polite"></div>
+      </article>
+    </section>
+  </main>
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="supabase-config.js"></script>
+  <script src="admin.js"></script>
+</body>
+</html>
