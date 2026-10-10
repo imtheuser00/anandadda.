@@ -19,7 +19,12 @@ where lower(email) = lower('OWNER@EXAMPLE.COM')
 on conflict (id) do update set role = excluded.role;
 ```
 
-7. In **Authentication** → **URL Configuration**, set **Site URL** to the final public website URL. Under **Redirect URLs**, add both the public website URL and the same URL followed by `/admin.html`. This keeps future Auth features compatible with the deployed site.
+7. In **Authentication** → **URL Configuration**, set **Site URL** to the final public website URL. Under **Redirect URLs**, add all three of these addresses:
+   - `https://YOUR-DOMAIN/`
+   - `https://YOUR-DOMAIN/admin.html`
+   - `https://YOUR-DOMAIN/reset-password.html`
+
+   Replace `YOUR-DOMAIN` with the real website address. The final address is needed for the Owner Panel's **Forgot your password?** link.
 
 The migration creates these public image buckets with a 5 MB limit and JPG/PNG/WebP support:
 
@@ -52,6 +57,14 @@ No Vercel environment variables are required for this static project. Do not cre
 ## Normal Owner Panel use
 
 Open `https://YOUR-DOMAIN/admin.html`, sign in with the owner account, and choose a section.
+
+### Reset a forgotten Owner Panel password
+
+1. Open `https://YOUR-DOMAIN/admin.html`.
+2. Click **Forgot your password?**.
+3. Enter the owner email address and click **Email me a reset link**.
+4. Open the email from Supabase (also check Spam), click its link, and choose a new password.
+5. Return to the Owner Panel and sign in with the new password.
 
 ### Change the logo or shop photo
 
