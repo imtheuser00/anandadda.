@@ -74,6 +74,20 @@
       image.src = url;
     } else image.removeAttribute('src');
   };
+  const setHeroPhoto = source => {
+    const image = $('#heroFeaturedImage');
+    const fallbackNode = $('#heroFeaturedFallback');
+    if (!image || !fallbackNode) return;
+    const url = safeImageUrl(source);
+    image.hidden = !url;
+    fallbackNode.hidden = Boolean(url);
+    if (!url) { image.removeAttribute('src'); return; }
+    image.onerror = () => {
+      image.hidden = true;
+      fallbackNode.hidden = false;
+    };
+    image.src = url;
+  };
   const setContactLinks = data => {
     const phone = data.phone || '';
     const whatsapp = data.whatsapp || '';
@@ -185,7 +199,9 @@
       text('hours', setting.opening_hours || fallback.hours);
       setContactLinks(setting);
       setLogo(getPublicUrl(cloud, 'site-media', setting.logo_path));
-      setPhoto('shopPhotoImage', 'shopPhotoFallback', getPublicUrl(cloud, 'site-media', setting.shop_photo_path), `${shopName} shop`);
+      const shopPhoto = getPublicUrl(cloud, 'site-media', setting.shop_photo_path);
+      setPhoto('shopPhotoImage', 'shopPhotoFallback', shopPhoto, `${shopName} shop`);
+      setHeroPhoto(shopPhoto);
     }
   };
   loadPublicContent().catch(() => { /* Fallback content stays visible when offline. */ });
