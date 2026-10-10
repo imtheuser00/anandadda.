@@ -66,6 +66,15 @@ Open `https://YOUR-DOMAIN/admin.html`, sign in with the owner account, and choos
 4. Open the email from Supabase (also check Spam), click its link, and choose a new password.
 5. Return to the Owner Panel and sign in with the new password.
 
+### Repair an older review database (only if review submission shows a `message` error)
+
+This is only needed for an Anand Adda project that already had the older review table before this Owner Panel was added.
+
+1. In Supabase, open **SQL Editor** and click **New query**.
+2. Open `supabase/migrations/20261010_fix_legacy_review_message.sql` in this repository.
+3. Copy its complete contents, paste it into the query box, and click **Run**.
+4. Return to the public website and submit the review again. The review will then enter the Owner Panel as **pending**.
+
 ### Change the logo or shop photo
 
 1. Open **Website photos**.
